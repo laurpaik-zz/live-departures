@@ -1,6 +1,25 @@
 import React, { Component } from 'react'
 import Departures from './components/Departures'
+// import Papa from 'papaparse'
+import $ from 'jquery'
 import './App.css'
+import './Departures.csv'
+
+const csvJSON = function (csv){
+  let lines=csv.split("\n");
+  let result = [];
+  let headers=lines[0].split(",");
+  for(let i=1;i<lines.length;i++){
+    let obj = {};
+    let currentline=lines[i].split(",");
+    for(let j=0;j<headers.length;j++){
+      obj[headers[j]] = currentline[j];
+    }
+    result.push(obj);
+  }
+  //return result; //JavaScript object
+  return JSON.stringify(result); //JSON
+}
 
 class App extends Component {
   constructor() {
@@ -11,18 +30,18 @@ class App extends Component {
   }
 
   getDepartures() {
-    this.setState({departures: [
-      {
-        carrier: 'Amtrak',
-        destination: 'Portland, ME',
-        status: 'On Time'
-      },
-      {
-        carrier: 'Amtrak',
-        destination: 'Providence, RI',
-        status: 'On Time'
-      },
-    ]})
+    $.ajax({
+      url: 'http://developer.mbta.com/lib/gtrtfs/Departures.csv',
+      crossDomain: true,
+      success: function(data) {
+        this.setState({departures: csvJSON(data)}, function () {
+          console.log(this.state)
+        })
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(err)
+      }
+    })
   }
 
   componentWillMount() {

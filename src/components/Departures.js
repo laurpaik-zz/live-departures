@@ -16,8 +16,14 @@ class Departures extends Component {
       <table className="departures">
         <thead>
           <tr>
-            <th>Carrier</th>
+            <th>TimeStamp</th>
+            <th>Origin</th>
+            <th>Trip</th>
             <th>Destination</th>
+            <th>Trip</th>
+            <th>ScheduledTime</th>
+            <th>Lateness</th>
+            <th>Track</th>
             <th>Status</th>
           </tr>
         </thead>
